@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 
 // Routes //
-var index = require('./routes/index');
+var index = require('./controllers/index');
 
 // App Set //
 app.set("port", (process.env.PORT || 5000));
