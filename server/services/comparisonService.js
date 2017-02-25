@@ -50,20 +50,21 @@ function getComparison () {
         .then(
             peopleObject => {
 
-                return makeChart(peopleObject.personA).then(
-                    response => {
-                        console.log("here is person A Chart:", response);
-                    }
-                )
-                    .catch(
-                        err => {
-                            return "ERROR! Comparison not made" + err;
-                        })
-                // return getCharts(peopleObject.personA, peopleObject.personB).then(
-                //         chartsResult => {
-                //             return makeComparison(chartsResult)
-                //         }
+                // return makeChart(peopleObject.personA).then(
+                //     response => {
+                //         console.log("here is person A Chart:", response);
+                //     }
                 // )
+                //     .catch(
+                //         err => {
+                //             return "ERROR! Comparison not made" + err;
+                //         })
+                return getCharts(peopleObject.personA, peopleObject.personB).then(
+                        chartsResult => {
+                            console.log('right before make comparison')
+                            return makeComparison(chartsResult)
+                        }
+                )
             })
         .catch(
             err => {
@@ -105,7 +106,6 @@ function makePeople(perA, perB){
                 personA : values[0],
                 personB : values[1]
             };
-            console.log(peopleObject);
             return peopleObject;
         }
 
@@ -138,37 +138,39 @@ function makePerson(person) {
 
 function getCharts(perA, perB) {
     console.log("got to getCharts", perA, perB);
-    Promise.all([makeChart(perA), makeChart(perB)])
+    return Promise.all([makeChart(perA), makeChart(perB)])
         .then(
             results => {
                 let chartsObject = {
                     personAChart : results[0],
                     personBChart : results[1]
                 };
-                console.log(chartsObject);
                 return chartsObject
             })
         .catch(
             err=> {
-                return "problem in getCharts" + err
+                console.log( "problem in getCharts", err)
             }
         )
     }
 
 
 function makeChart(person) {
-    console.log("got to make chart")
     return ephemerisService.getEphemeris(person).then(
         c => {
-            console.log("got through chartFactory")
             return c;
             // ... do stuff with your chart ...
         })
+        .catch(
+            err => {
+                console.log("error in ephemeris", err)
+            }
+        )
 }
 
 function makeComparison(chartsObject){
-    console.log("got to makeComparison");
-    console.log(chartsObject)
+    
+    aspectUtility.compare(chartsObject)
     return 5;
 }
 

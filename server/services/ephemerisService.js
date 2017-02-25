@@ -18,14 +18,14 @@ function getEphemeris(person) {
         method: 'GET',
         uri: endpoint,
         qs: {
-            year:'1984',
-            month:'03',
-            hour:'11',
-            lat:'40.9791',
-            lon:'-74.1165',
-            timeZone:'America/New_York',
-            day:'29',
-            minute:'07'
+            year: person.year,
+            month: person.month,
+            hour: person.hour,
+            lat: person.lat,
+            lon: person.lon,
+            timeZone : person.timezone,
+            day: person.day,
+            minute: person.minute
             // access_token: 'xxxxx xxxxx' // -> uri + '?access_token=xxxxx%20xxxxx'
         },
         // headers: {
@@ -38,6 +38,6 @@ function getEphemeris(person) {
     return request(options).then(function(response){
         return response
     }).catch(function(err) {
-        //ERROR!
+       console.log('error in ephemeris!') //ERROR!
     })
 }

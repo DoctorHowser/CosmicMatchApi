@@ -1,126 +1,142 @@
-
 module.exports = {
-    compare : getComparison
+  compare: getComparison
 };
 
-const userPlanets = [0, 0, 0, 1, 3, 4];
-const lookupPlanets = [0, 1, 3, 3, 4, 3];
+const userPlanets = [
+  "Ascendant",
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto"
+];
+const lookupPlanets = [
+  "Ascendant",
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto"
+];
 
-//sun, moon, merc, ven, mar, jup, sat, uran, nep, pluto
-var x = 3;
-var y = 9;
+function getComparison(peopleCharts) {
+  let comparison = 0;
+  let squareCount = 0
+  let totalAspects = 0;
+  let angleObj = getAngles(peopleCharts);
 
+  for (let name in angleObj) {
+    let aspect = getAspect(angleObj[name].angle);
 
-//
-// sun sun
-// sun moon
-// sun venus
-// moon venus
-// venus mars
-// mars venus
-// asc asc
+    angleObj[name].aspect = aspect;
 
-
-function getComparison(person1, person2) {
-
-    let comparison = 0;
-    let angleList = getAngles(person1, person2);
-
-    console.log(angleList);
-
-    for (let i = 0; i <angleList.length; i++) {
-        let aspect = getAspect(angle);
-
-        if (aspect != "Square" || aspect != "N/A") {
-            comparison++
-        }
-
-        if (aspect == "Square") {
-            comparison--
-        }
-
-        console.log (comparison / 7);
+    if (aspect != "N/A") {
+      totalAspects++;
     }
 
-
-}
-
-function getAngles(person1, person2) {
-
-
-
-    let angleList = [];
-    console.log("got to getAngles!", userPlanets.length);
-    for (let i = 0; i< userPlanets.length; i++) {
-
-
-
-
-        let temp = person1.outerPlanets[userPlanets[i]].longitude - person2.outerPlanets[lookupPlanets[i]].longitude;
-        //normalize if negative
-        if (temp < 0) {
-            temp = temp * (-1);
-        }
-
-        //normalize to use shorter path around circle
-        if (temp > 180) {
-            temp = 360 - temp;
-        }
-
-        angleList.push(temp)
+    if (aspect != "Square" && aspect != "N/A") {
+      comparison++;
     }
 
-    console.log("after for loop");
-    return angleList;
+    if (aspect == "Square") {
+        squareCount++
+    }
+  }
+
+  comparison = getOutlyingAspects(angleObj, comparison);
+
+  console.log(angleObj);
+  console.log(comparison / totalAspects);
 }
-    // console.log(person1.outerPlanets[x].name);
-    // console.log(person1.outerPlanets[x].longitude);
-    // console.log(person2.outerPlanets[x].name);
-    // console.log(person2.outerPlanets[x].longitude);
-    //person1.ascendant
+function getOutlyingAspects(angleObj, comparison) {
+  // except for  MARS conjunct Saturn or Neptune----NEGATIVE
+  // except for MOON opposition to Saturn or conjunct Mars----NEGATIVE
+  // except MOON conjunct Saturn------NEGATIVE
 
-    // console.log(person1.outerPlanets[x].longitude + person1.outerPlanets[x].name);
-    // console.log(person2.outerPlanets[y].longitude + person2.outerPlanets[y].name);
-    //
-    //
-    // console.log('angle: ' + angle);
-    //
-    // var aspect = getAspect(angle);
-    // console.log(aspect);
+  if (angleObj["MarsSaturn"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["MarsNeptune"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["MoonSaturn"].aspect == "Opposition") {
+    comparison--;
+  }
+  if (angleObj["MoonMars"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["MoonSaturn"].aspect == "Conjunction") {
+    comparison--;
+  }
+  return comparison;
+}
 
+function getAngles(peopleCharts) {
+  let person1 = peopleCharts.personAChart;
+  let person2 = peopleCharts.personBChart;
+
+  person1.Ascendant = {
+    longitude: person1.Ascendant
+  };
+
+  person2.Ascendant = {
+    longitude: person2.Ascendant
+  };
+  let angleObj = {};
+  console.log("got to getAngles!", userPlanets.length);
+  for (let i = 0; i < userPlanets.length; i++) {
+    for (let j = 0; j < lookupPlanets.length; j++) {
+      let temp = person1[userPlanets[i]].longitude -
+        person2[lookupPlanets[j]].longitude;
+      //normalize if negative
+      if (temp < 0) {
+        temp = temp * (-1);
+      }
+
+      //normalize to use shorter path around circle
+      if (temp > 180) {
+        temp = 360 - temp;
+      }
+      angleObj[userPlanets[i] + lookupPlanets[j]] = temp;
+    }
+  }
+
+  for (let i = 0; i < userPlanets.length; i++) {
+    for (let j = 0; j < lookupPlanets.length; j++) {
+      let temp = person1[userPlanets[i]].longitude -
+        person2[lookupPlanets[j]].longitude;
+      //normalize if negative
+      if (temp < 0) {
+        temp = temp * (-1);
+      }
+
+      //normalize to use shorter path around circle
+      if (temp > 180) {
+        temp = 360 - temp;
+      }
+      angleObj[userPlanets[i] + lookupPlanets[j]] = {
+        angle: temp,
+        aspect: ""
+      };
+    }
+  }
+
+  console.log("after for loop");
+  return angleObj;
+}
 
 function getAspect(angle) {
-    if (angle < 15) {
-        return "Conjunction"; //+
-    }
-
-    else if (50 < angle && angle < 70){
-        return "Sextile"; //+
-    }
-
-    else if (80 < angle && angle < 100){
-        return "Square";//-
-    }
-
-    else if (110 < angle && angle < 130){
-        return "Trine";//+
-    }
-
-    else if (165 < angle){
-        return "Opposition"; //+
-    }
-
-    else {
-        return "N/A";
-    }
-}
-
-
-//function getAngles(person1, person2) {
-// use arrays of degrees for each person to make an object of the comparison and the angle created
-//return object of angles for each comparison}
-
-//
+//+- 12 degress
 // Conjunction: 0 degrees
 //
 // Opposition: 180 degrees
@@ -130,3 +146,23 @@ function getAspect(angle) {
 // Square: 90 degrees
 //
 // Sextile: 60 degrees
+
+
+
+  if (angle <= 12) {
+    return "Conjunction"; //+
+  } else if (48 < angle && angle < 72) {
+    return "Sextile"; //+
+  } else if (78 < angle && angle < 102) {
+    return "Square"; //-
+  } else if (108 < angle && angle < 132) {
+    return "Trine"; //+
+  } else if (168 < angle) {
+    return "Opposition"; //+
+  } else {
+    return "N/A";
+  }
+}
+
+
+
