@@ -8,36 +8,33 @@ let chartMelo;
 let chartSteven;
 
 let infoA = {
-    name : "Lisa",
-    year : "1970",
-    month : "09",
-    day : "10",
-    hour : "09",
-    minute : "06",
-    timezone : "America/New_York",
-    lat: 37.6853,
-    lon: -122.1200
-    // dob : "1970-09-10T09:06Z",
-    // place : {
-    //     lat: 37.6853,
-    //     lng: -122.1200
-    // }
+  name: "Julie",
+  year: "1970",
+  month: "01",
+  day: "21",
+  hour: "22",
+  minute: "57",
+  timezone: "America/Los_Angeles",
+  //pacific
+  //36n10'30"
+  //115w8'11"
+  lat: 36.1750,
+  lon: -115.136388
+
 };
 let infoB = {
-    name: "Blair",
-    year : "1962",
-    month : "01",
-    day : "24",
-    hour : "12",
-    minute : "53",
-    timezone : "America/New_York",
-    lat: 38.5600,
-    lon:  -121.4900
-    // dob: "1962-01-24T12:53Z",
-    // place: {
-    //     lat: 38.5600,
-    //     lng: -121.4900
-    // }
+  name: "Nichola",
+  year: "1969",
+  month: "07",
+  day: "24",
+  hour: "20",
+  minute: "52",  
+  timezone: "America/Los_Angeles",
+  //pacific
+  //34n1'10"
+  //118w29'25"
+  lat:  34.01944,
+  lon:  -118.49027
 };
 getComparison();
 
