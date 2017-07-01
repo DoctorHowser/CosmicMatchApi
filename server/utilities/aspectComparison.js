@@ -1,4 +1,4 @@
-const readings = require ('../data/analysis.json')
+const readings = require('../data/analysis.json')
 
 module.exports = {
   compare: getComparison
@@ -51,17 +51,13 @@ function getComparison(peopleCharts) {
     }
 
     if (aspect == "Square") {
-        squareCount++
+      squareCount++
     }
   }
 
   comparison = getOutlyingAspects(angleObj, comparison);
 
-  console.log(angleObj);
-
   const percentage = comparison / totalAspects
-  console.log(percentage);
-
   const reading = getReading(percentage)
 
   const response = {
@@ -73,8 +69,8 @@ function getComparison(peopleCharts) {
 }
 
 function getReading(percentage) {
-
-  let roundDown = Math.floor(percentage);
+  const oneHundred = percentage * 100;
+  let roundDown = Math.floor(oneHundred);
 
   if (roundDown < 60) roundDown = 60;
   if (roundDown > 80) roundDown = 80;
@@ -121,7 +117,6 @@ function getAngles(peopleCharts) {
     longitude: person2.Ascendant
   };
   let angleObj = {};
-  console.log("got to getAngles!", userPlanets.length);
   for (let i = 0; i < userPlanets.length; i++) {
     for (let j = 0; j < lookupPlanets.length; j++) {
       let temp = person1[userPlanets[i]].longitude -
@@ -159,21 +154,20 @@ function getAngles(peopleCharts) {
     }
   }
 
-  console.log("after for loop");
   return angleObj;
 }
 
 function getAspect(angle) {
-//+- 12 degress
-// Conjunction: 0 degrees
-//
-// Opposition: 180 degrees
-//
-// Trine: 120 degrees
-//
-// Square: 90 degrees
-//
-// Sextile: 60 degrees
+  //+- 12 degress
+  // Conjunction: 0 degrees
+  //
+  // Opposition: 180 degrees
+  //
+  // Trine: 120 degrees
+  //
+  // Square: 90 degrees
+  //
+  // Sextile: 60 degrees
 
 
 

@@ -4,46 +4,15 @@ var ChartFactory = require('../external/astrologyjs').ChartFactory;
 let aspectUtility = require('../utilities/aspectComparison');
 let ephemerisService = require('./ephemerisService')
 
-let chartMelo;
-let chartSteven;
-
-let infoA = {
-  name: "Julie",
-  year: "1970",
-  month: "01",
-  day: "21",
-  hour: "22",
-  minute: "57",
-  timezone: "America/Los_Angeles",
-  //pacific
-  //36n10'30"
-  //115w8'11"
-  lat: 36.1750,
-  lon: -115.136388
-
-};
-let infoB = {
-  name: "Nichola",
-  year: "1969",
-  month: "07",
-  day: "24",
-  hour: "20",
-  minute: "52",  
-  timezone: "America/Los_Angeles",
-  //pacific
-  //34n1'10"
-  //118w29'25"
-  lat:  34.01944,
-  lon:  -118.49027
-};
-getComparison();
+// const test = getComparison();
+// console.log(test)
 
 module.exports = {
     getComparison : getComparison
 };
 
-function getComparison () {
-    return makePeople(infoA, infoB)
+function getComparison (personA, personB) {
+    return makePeople(personA, personB)
         .then(
             peopleObject => {
 
@@ -101,7 +70,7 @@ function makePerson(person) {
 }
 
 function getCharts(perA, perB) {
-    console.log("got to getCharts", perA, perB);
+    // console.log("got to getCharts", perA, perB);
     return Promise.all([makeChart(perA), makeChart(perB)])
         .then(
             results => {
