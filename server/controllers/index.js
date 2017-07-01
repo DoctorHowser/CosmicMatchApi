@@ -6,7 +6,11 @@ var ephemeris = require('../external/ephemris')
 
 
 router.get("/comparison", function(req, res, next){
-    let comparison;
+
+
+
+
+    let comparison ;
 
     comparisonService.getComparison().then(
     result => {

@@ -1,3 +1,5 @@
+const readings = require ('../data/analysis.json')
+
 module.exports = {
   compare: getComparison
 };
@@ -56,8 +58,34 @@ function getComparison(peopleCharts) {
   comparison = getOutlyingAspects(angleObj, comparison);
 
   console.log(angleObj);
-  console.log(comparison / totalAspects);
+
+  const percentage = comparison / totalAspects
+  console.log(percentage);
+
+  const reading = getReading(percentage)
+
+  const response = {
+    percentage, reading
+  }
+
+  console.log(response)
+  return response
 }
+
+function getReading(percentage) {
+
+  let roundDown = Math.floor(percentage);
+
+  if (roundDown < 60) roundDown = 60;
+  if (roundDown > 80) roundDown = 80;
+
+  roundDown = roundDown.toString();
+  const result = readings[roundDown]
+
+  return result;
+
+}
+
 function getOutlyingAspects(angleObj, comparison) {
   // except for  MARS conjunct Saturn or Neptune----NEGATIVE
   // except for MOON opposition to Saturn or conjunct Mars----NEGATIVE

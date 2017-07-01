@@ -58,7 +58,6 @@ function getComparison () {
                 //         })
                 return getCharts(peopleObject.personA, peopleObject.personB).then(
                         chartsResult => {
-                            console.log('right before make comparison')
                             return makeComparison(chartsResult)
                         }
                 )
@@ -69,32 +68,6 @@ function getComparison () {
             });
 }
 
-
-
-
-
-
-
-    // console.log("got to getComparison");
-    // return Person.create("Lisa", "1970-09-10T09:06Z", {lat: 37.6853, lng: -122.1200}).then(
-    //     p1 => {
-    //         personA = p1;
-    //         let personAChart = getChart(personA).then(
-    //             c => {
-    //                 console.log("personAChart", c)
-    //             }
-    //         );
-    //
-    //         Person.create("Blair", "1962-01-24T12:53Z", {lat: 38.5600, lng: -121.4900}).then(
-    //             p2 => {
-    //                 personB = p2;
-    //                 let personBChart = getChart(personB);
-    //                 console.log(personBChart);
-    //                 let array = [personAChart, personBChart];
-    //                 console.log(array);
-    //                 return array;
-    //             })
-    //     })
 
 function makePeople(perA, perB){
     return Promise.all([makePerson(perA),makePerson(perB)]).then(
@@ -110,13 +83,7 @@ function makePeople(perA, perB){
 }
 
 function makePerson(person) {
-    // return Person.create(person.name, person.dob, person.place).then(
-    //     p => {
-    //         return p
-    //     }
-    // )
-    
-    
+   
     let personObj =  {
           year : person.year,
           month : person.month,
@@ -167,61 +134,8 @@ function makeChart(person) {
 
 function makeComparison(chartsObject){
     
-    aspectUtility.compare(chartsObject)
-    return 5;
+    return aspectUtility.compare(chartsObject)
+
 }
 
-//
-//
-//                     ChartFactory.create("person1 Chart Test", personA).then(
-//                         c => {
-//                             chartMelo = c;
-//                             // ... do stuff with your chart ...
-//
-//                             console.log("here is p1 ascendant", chartMelo);
-//                             // for(let i = 0; i < chart.aspects.length; i++){
-//                             //     console.log(chart.aspects[i]);
-//                             // }
-//                             // for(let i = 0; i < chart.outerPlanets.length; i++){
-//                             //     console.log(chart.outerPlanets[i]);
-//                             // }
-//                             //zodiac.getZodiacSign(chart.houses[0]);
-//                             // console.log(chart.outerPlanets[3].name);
-//                             // console.log(chart.outerPlanets[3].longitude);
-//                             // zodiac.getDegrees(chart.outerPlanets[3].longitude);
-//
-//                             //ComparisonChart? For Trine, Square, etc?
-//                             //
-//                         },
-//                         err => {
-//                             console.log("Ruh, roh. Something went wrong in ChartFactory.", err)
-//                         }
-//                     );
-//
-//                     ChartFactory.create("Person 2 Chart Test", personB).then(
-//                         c => {
-//                             chartSteven = c;
-//                             // ... do stuff with your chart ...
-//                             //console.log("aspects: " + chart.aspects[0].type + chart.aspects[0].orb + chart.aspects[0].isApplying());
-//                             console.log("here is p2 ascendant: ", chartSteven);
-//                             // for(let i = 0; i < chart.aspects.length; i++){
-//                             //     console.log(chart.aspects[i]);
-//                             // }
-//                             // for(let i = 0; i < chart.outerPlanets.length; i++){
-//                             //     console.log(chart.outerPlanets[i]);
-//                             // }
-//                             // zodiac.getZodiacSign(chartSteven.houses[0]);
-//                             // console.log(chartSteven.outerPlanets[3].name);
-//                             // console.log(chartSteven.outerPlanets[3].longitude);
-//                             // zodiac.getDegrees(chartSteven.outerPlanets[3].longitude);
-//                             // aspectComp.compare(chartMelo, chartSteven)
-//
-//                         },
-//                         err => {
-//                             console.log("Ruh, roh. Something went wrong in ChartFactory.", err)
-//                         }
-//                     );
-//                 });
-//         });
-// }
-//
+

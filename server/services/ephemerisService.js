@@ -7,12 +7,6 @@ module.exports = {
 
 let endpoint = 'https://ephemeris-api.herokuapp.com/ephemeris'
 
-
-//();
-
-
-
-
 function getEphemeris(person) {
     let options = {
         method: 'GET',
