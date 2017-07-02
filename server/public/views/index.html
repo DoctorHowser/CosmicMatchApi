@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Express / Passport</title>
+        <title>Cosmic Match</title>
 
         <link rel="stylesheet" href="/vendors/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/styles/style.css">
 
-        <script type="text/javascript" src="/vendors/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="/vendors/angular/angular.min.js"></script>
         <script type="text/javascript" src="/assets/scripts/app.min.js"></script>
     </head>
 
-    <body>
-        <div class="instructions">
-            <div class="container">
-                <h1 class="lead">Passport Login</h1>
+    <body class="container">
+        <div class="jumbotron">
+            <h1>Health Check! Cosmic Match is running!</h1>
+        </div>
+       <div ng-app="myApp">
+            <div ng-controller="EphemerisController">
+               <form novalidate ng-submit="getEphemeris()">
+                   <div>
+                       <h2>Person A</h2>
+                        <div location-input location-object="personA.location.lat" input-id="latA" label-text="Latitude" input-placeholder="44.9778 N is Positive, S is Negative"></div>
+                        <div location-input location-object="personA.location.lon" input-id="lonA" label-text="Longitude" input-placeholder="-92.2650 E is Positive, W is Negative"></div>
+                        <div date-time-input date-time-object="personA.dateTime.year" input-id="yearA" label-text="Birth Year" input-placeholder="YYYY"></div>
+                        <div date-time-input date-time-object="personA.dateTime.month" input-id="monthA" label-text="Birth Month" input-placeholder="MM"></div>
+                        <div date-time-input date-time-object="personA.dateTime.day" input-id="dayA" label-text="Birth Day" input-placeholder="DD"></div>
+                        <div date-time-input date-time-object="personA.dateTime.hour" input-id="hourA" label-text="Birth Hour" input-placeholder="HH"></div>
+                        <div date-time-input date-time-object="personA.dateTime.minute" input-id="minuteA" label-text="Birth Minute" input-placeholder="mm"></div>
+                        <div time-zone-input time-zone-object="personA.timezone" input-id="timezoneA" label-text="Time Zone" time-zone-options="timezoneOptions"></div>
+                   </div>
+                   <div>
+                       <h2>Person B</h2>
+                        <div location-input location-object="personB.location.lat" input-id="latB" label-text="Latitude" input-placeholder="44.9778 N is Positive, S is Negative"></div>
+                        <div location-input location-object="personB.location.lon" input-id="lonB" label-text="Longitude" input-placeholder="-92.2650 E is Positive, W is Negative"></div>
+                        <div date-time-input date-time-object="personB.dateTime.year" input-id="yearB" label-text="Birth Year" input-placeholder="YYYY"></div>
+                        <div date-time-input date-time-object="personB.dateTime.month" input-id="monthB" label-text="Birth Month" input-placeholder="MM"></div>
+                        <div date-time-input date-time-object="personB.dateTime.day" input-id="dayb" label-text="Birth Day" input-placeholder="DD"></div>
+                        <div date-time-input date-time-object="personB.dateTime.hour" input-id="hourB" label-text="Birth Hour" input-placeholder="HH"></div>
+                        <div date-time-input date-time-object="personB.dateTime.minute" input-id="minuteB" label-text="Birth Minute" input-placeholder="mm"></div>
+                        <div time-zone-input time-zone-object="personB.timezone" input-id="timezoneB" label-text="Time Zone" time-zone-options="timezoneOptions"></div>
+                   </div>
+                    <input type="submit" value="Get Ephemeris"/>
+                </form>
+                
+                <pre><code>{{result}}</code></pre>
             </div>
-        </div>
-        <div class="container">
-            <form action="/" method="post">
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" id="username"/>
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password"/>
-                </div>
-                <div>
-                    <input type="submit" value="Log In"/>
-                    <a href="/register">Register</a>
-                </div>
-            </form>
-        </div>
+       </div>
     </body>
 </html>
