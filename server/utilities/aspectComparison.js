@@ -5,7 +5,7 @@ module.exports = {
 };
 
 const userPlanets = [
-  "Ascendant",
+  // "Ascendant",
   "Sun",
   "Moon",
   "Mercury",
@@ -18,7 +18,7 @@ const userPlanets = [
   "Pluto"
 ];
 const lookupPlanets = [
-  "Ascendant",
+  // "Ascendant",
   "Sun",
   "Moon",
   "Mercury",
