@@ -4,6 +4,20 @@ var path = require('path');
 var comparisonService = require('../services/comparisonService');
 var ephemeris = require('../external/ephemris')
 
+router.all('/*', function (req, res, next){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Request-Method', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+	res.setHeader('Access-Control-Allow-Headers', req.headers.origin);
+	if ( req.method === 'OPTIONS' ) {
+		res.writeHead(200);
+		res.end();
+		return;
+    }
+    
+    next();
+})
+
 
 router.post("/comparison", function (req, res, next) {
 

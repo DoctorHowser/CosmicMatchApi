@@ -18,7 +18,7 @@ const userPlanets = [
   "Pluto"
 ];
 const lookupPlanets = [
-  // "Ascendant",
+  // " ",
   "Sun",
   "Moon",
   "Mercury",
