@@ -73,7 +73,7 @@ function getReading(percentage) {
   let roundDown = Math.floor(oneHundred);
 
   if (roundDown < 60) roundDown = 60;
-  if (roundDown > 80) roundDown = 80;
+  if (roundDown > 95) roundDown = 80;
 
   roundDown = roundDown.toString();
   const result = readings[roundDown]
@@ -102,6 +102,22 @@ function getOutlyingAspects(angleObj, comparison) {
   if (angleObj["MoonSaturn"].aspect == "Conjunction") {
     comparison--;
   }
+  if (angleObj["SaturnMars"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["NeptuneMars"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["SaturnMoon"].aspect == "Opposition") {
+    comparison--;
+  }
+  if (angleObj["MarsMoon"].aspect == "Conjunction") {
+    comparison--;
+  }
+  if (angleObj["SaturnMoon"].aspect == "Conjunction") {
+    comparison--;
+  }
+
   return comparison;
 }
 

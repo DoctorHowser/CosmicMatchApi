@@ -15,16 +15,6 @@ function getComparison (personA, personB) {
     return makePeople(personA, personB)
         .then(
             peopleObject => {
-
-                // return makeChart(peopleObject.personA).then(
-                //     response => {
-                //         console.log("here is person A Chart:", response);
-                //     }
-                // )
-                //     .catch(
-                //         err => {
-                //             return "ERROR! Comparison not made" + err;
-                //         })
                 return getCharts(peopleObject.personA, peopleObject.personB).then(
                         chartsResult => {
                             return makeComparison(chartsResult)
