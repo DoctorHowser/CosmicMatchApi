@@ -60,10 +60,7 @@ router.post("/comparison", function (req, res, next) {
     comparisonService.getComparison(infoA, infoB).then(
         result => {
             comparison = result;
-
-            // console.log("at the end", comparison);
             res.status(200).send(comparison)
-
         })
 });
 
