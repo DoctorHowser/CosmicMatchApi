@@ -8,7 +8,7 @@
     "start": "grunt && node server/app.js"
   },
   "engines": {
-    "node": "8.1.4"
+    "node": "9.4.0"
   },
   "author": "Dane Smith",
   "license": "ISC",
