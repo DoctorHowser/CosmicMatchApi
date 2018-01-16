@@ -1,6 +1,6 @@
 const express = require('express');
 //const encryptLib = require('../modules/encryption');
-const pool = require('../modules/pool');
+// const pool = require('../modules/pool');
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.get('/')
+// router.get('/')
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
