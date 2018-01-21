@@ -60,7 +60,7 @@ router.get('/login/:id', (req, res) => {
 })
 
 router.post('/create', function(req, res) {
-  const newUser = req.body;
+  const newUser = req.body.data;
   const query1 = `INSERT INTO auth0user(auth0_user_id) VALUES ($1) RETURNING ID;`
 
   pool.query(query1, [newUser.auth0id]).then((response) => {

@@ -1,6 +1,6 @@
 CREATE TABLE auth0user (
 	id SERIAL PRIMARY KEY,
-	auth0_user_id BIGINT UNIQUE 
+	auth0_user_id VARCHAR(255) UNIQUE 
 );
 
 CREATE TABLE birthinfo (
