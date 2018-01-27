@@ -4,12 +4,17 @@ CREATE TABLE auth0user (
 );
 
 CREATE TABLE birthinfo (
-	id SERIAL PRIMARY KEY,
-	date_time TIMESTAMP WITH TIME ZONE NOT NULL,
-	latitude REAL NOT NULL,
-	longitude REAL NOT NULL,
-	user_id INT REFERENCES auth0user
+    id SERIAL PRIMARY KEY,
+	day INT NOT NULL,
+	month INT NOT NULL,
+	year INT NOT NULL,
+	hour INT NOT NULL,
+	minute INT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    user_id INT REFERENCES auth0user
 );
+
 
 CREATE TABLE match (
 	id SERIAL PRIMARY KEY,

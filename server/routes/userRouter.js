@@ -23,12 +23,16 @@ router.get('/login/:id', (req, res) => {
                         m.match_percent, 
                         m.match_text, 
                         m.match_name, 
-                        b.date_time, 
+                        b.day,
+                        b.month, 
+                        b.year, 
+                        b.hour, 
+                        b.minute, 
                         b.latitude, 
                         b.longitude 
                       FROM 
                         auth0user a 
-                      JOIN 
+                      FULL OUTER JOIN 
                         match m 
                       ON 
                         (a.id = m.user_id) 
@@ -60,15 +64,14 @@ router.get('/login/:id', (req, res) => {
 })
 
 router.post('/create', function(req, res) {
-  const newUser = req.body.data;
+  const { day, month, year, hour, minute, lat, lon, auth0id } = req.body.data;
   const query1 = `INSERT INTO auth0user(auth0_user_id) VALUES ($1) RETURNING ID;`
-
-  pool.query(query1, [newUser.auth0id]).then((response) => {
-    const dateTime = new Date(newUser.dateTime)
+  pool.query(query1, [auth0id]).then((response) => {
+    
     const newId = response.rows[0].id;
-    const query2 = `INSERT INTO birthinfo(date_time, latitude, longitude, user_id) VALUES ($1, $2, $3, ${newId});`
+    const query2 = `INSERT INTO birthinfo(day, month, year, hour, minute, latitude, longitude, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, ${newId});`
 
-    pool.query(query2, [dateTime, newUser.latitude, newUser.longitude]).then((response) => {
+    pool.query(query2, [day, month, year, hour, minute, lat, lon]).then((response) => {
       res.sendStatus(201);
     })
   }).catch(err => {
