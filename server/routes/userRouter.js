@@ -18,29 +18,32 @@ router.get('/', (req, res) => {
 
 router.get('/login/:id', (req, res) => {
   const userId = req.params.id;
-  const queryText = `SELECT 
-                        a.*, 
-                        m.match_percent, 
-                        m.match_text, 
-                        m.match_name, 
-                        b.day,
-                        b.month, 
-                        b.year, 
-                        b.hour, 
-                        b.minute, 
-                        b.latitude, 
-                        b.longitude 
-                      FROM 
-                        auth0user a 
-                      FULL OUTER JOIN 
-                        match m 
-                      ON 
-                        (a.id = m.user_id) 
-                      JOIN 
-                        birthinfo b 
-                      ON 
-                        (m.user_id = b.user_id) 
-                      WHERE a.auth0_user_id = $1`;
+  const queryText = 
+  `SELECT 
+    a.*, 
+    m.match_percent, 
+    m.match_text, 
+    m.match_name, 
+    b.day,
+    b.month, 
+    b.year, 
+    b.hour, 
+    b.minute, 
+    b.latitude, 
+    b.longitude,
+    b.timezone 
+  FROM 
+    auth0user a 
+  JOIN 
+    birthinfo b 
+  ON 
+    (a.id = b.user_id)
+  FULL OUTER JOIN 
+    match m 
+  ON 
+    (b.user_id = m.user_id) 
+  WHERE a.auth0_user_id =  $1`;
+
   pool.query(queryText, [userId]).then(function(response){
     if(response.rows.length > 0) {
       const rows = response.rows;
@@ -64,14 +67,14 @@ router.get('/login/:id', (req, res) => {
 })
 
 router.post('/create', function(req, res) {
-  const { day, month, year, hour, minute, lat, lon, auth0id } = req.body.data;
+  const { day, month, year, hour, minute, lat, lon, timezone, auth0id } = req.body.data;
   const query1 = `INSERT INTO auth0user(auth0_user_id) VALUES ($1) RETURNING ID;`
   pool.query(query1, [auth0id]).then((response) => {
     
     const newId = response.rows[0].id;
-    const query2 = `INSERT INTO birthinfo(day, month, year, hour, minute, latitude, longitude, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, ${newId});`
+    const query2 = `INSERT INTO birthinfo(day, month, year, hour, minute, latitude, longitude, timezone, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, ${newId});`
 
-    pool.query(query2, [day, month, year, hour, minute, lat, lon]).then((response) => {
+    pool.query(query2, [day, month, year, hour, minute, lat, lon, timezone]).then((response) => {
       res.sendStatus(201);
     })
   }).catch(err => {
@@ -100,9 +103,14 @@ router.post('/create', function(req, res) {
 
 function getUserBirthData(row) {
   const dobObject = {
-    dateTime : row.date_time,
-    latitude : row.latitude,
-    longitude : row.longitude
+    hour : row.hour,
+    minute : row.minute,
+    day : row.day,
+    month : row.month,
+    year : row.year,
+    hour : row.hour,
+    lat : row.latitude,
+    lon : row.longitude
   }
 
   return dobObject;
@@ -111,6 +119,8 @@ function getUserBirthData(row) {
 function getUserMatches(rows) {
   let responseArray = [];
   rows.forEach(row => {
+
+    //TODO: figure out what to do for nulls? 
 
     const rowObject = {
       name : row.match_name,
