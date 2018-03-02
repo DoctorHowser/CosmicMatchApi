@@ -61,7 +61,8 @@ function getComparison(peopleCharts) {
   const reading = getReading(percentage)
 
   const response = {
-    percentage, reading
+    percentage,
+    reading
   }
 
   console.log(response)
