@@ -60,9 +60,12 @@ router.post("/comparison", jwtCheck, function (req, res, next) {
 
     comparisonService.getComparison(infoA, infoB).then(
         result => {
-            sqlService.saveMatch(result, req.user.sub, infoB.name);
-            let comparison = result;
-            res.status(200).send(comparison)
+            let name = infoB.name;
+           sqlService.saveMatch(result, req.user.sub, name).then(response => {
+            let comparison = {...response} ;
+            res.status(200).json(comparison)
+           });
+            
         })
 });
 

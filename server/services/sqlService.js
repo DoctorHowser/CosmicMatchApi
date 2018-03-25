@@ -66,10 +66,18 @@ function saveMatch(matchData, userId, name) {
       (SELECT id from auth0user WHERE auth0user.auth0_user_id = $1), $2, $3, $4)
        RETURNING *;`
 
-    pool.query(queryText, [userId, matchData.percent, matchData.reading, name])
+    return pool.query(queryText, [userId, matchData.percent, matchData.reading, name])
     .then(function(response){
         if(response.rows.length > 0) {
-            return matchData
+
+          const row = response.rows[0]
+          const responseJSON = {
+            name : row.match_name,
+            percent : row.match_percent,
+            reading : row.match_text
+          }
+  
+          return responseJSON
         }
     })
     .catch( (err) => {
