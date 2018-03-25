@@ -59,10 +59,14 @@ function getUserData (userId) {
 
 function saveMatch(matchData, userId, name) {
   //user_id is an int, have the actual userID
-    const queryText = `INSERT INTO match (user_id, match_percent, match_text, match_name) 
-VALUES ($1, $2, $3, $4) RETURNING *;`
+    const queryText = 
+    `INSERT INTO match 
+    (user_id, match_percent, match_text, match_name) 
+    VALUES (
+      (SELECT id from auth0user WHERE auth0user.auth0_user_id = $1), $2, $3, $4)
+       RETURNING *;`
 
-    pool.query(queryText, [userId, matchData.percentage, matchData.reading, name])
+    pool.query(queryText, [userId, matchData.percent, matchData.reading, name])
     .then(function(response){
         if(response.rows.length > 0) {
             return matchData
@@ -98,7 +102,7 @@ function getUserBirthData(row) {
       const rowObject = {
         name : row.match_name,
         percent : row.match_percent,
-        text : row.match_text
+        reading : row.match_text
       }
       responseArray.push(rowObject)
     });

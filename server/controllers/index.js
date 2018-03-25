@@ -57,12 +57,11 @@ router.post("/comparison", jwtCheck, function (req, res, next) {
     //     lon: -118.49027
     // };
 
-    let comparison;
 
     comparisonService.getComparison(infoA, infoB).then(
         result => {
             sqlService.saveMatch(result, req.user.sub, infoB.name);
-            comparison = result;
+            let comparison = result;
             res.status(200).send(comparison)
         })
 });

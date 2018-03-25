@@ -57,11 +57,11 @@ function getComparison(peopleCharts) {
 
   comparison = getOutlyingAspects(angleObj, comparison);
 
-  const percentage = comparison / totalAspects
-  const reading = getReading(percentage)
+  const percent = comparison / totalAspects
+  const reading = getReading(percent)
 
   const response = {
-    percentage,
+    percent,
     reading
   }
 
