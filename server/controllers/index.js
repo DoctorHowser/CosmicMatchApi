@@ -3,24 +3,26 @@ var router = express.Router();
 var path = require('path');
 var comparisonService = require('../services/comparisonService');
 var ephemeris = require('../external/ephemris')
+var sqlService = require('../services/sqlService');
+let jwtCheck = require('../middleware/auth')
+let jwtAuthz = require('express-jwt-authz')
 
-router.all('/*', function (req, res, next){
-    res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Request-Method', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
-	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-	if ( req.method === 'OPTIONS' ) {
-		res.writeHead(200);
-		res.end();
-		return;
-    }
+// router.all('/*', function (req, res, next){
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+// 	res.setHeader('Access-Control-Request-Method', '*');
+// 	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+// 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+// 	if ( req.method === 'OPTIONS' ) {
+// 		res.writeHead(200);
+// 		res.end();
+// 		return;
+//     }
     
-    next();
-})
+//     next();
+// })
 
 
-router.post("/comparison", function (req, res, next) {
-
+router.post("/comparison", jwtCheck, function (req, res, next) {
 
     const infoA = req.body.personA;
     const infoB = req.body.personB;
@@ -55,12 +57,15 @@ router.post("/comparison", function (req, res, next) {
     //     lon: -118.49027
     // };
 
-    let comparison;
 
     comparisonService.getComparison(infoA, infoB).then(
         result => {
-            comparison = result;
-            res.status(200).send(comparison)
+            let name = infoB.name;
+           sqlService.saveMatch(result, req.user.sub, name).then(response => {
+            let comparison = {...response} ;
+            res.status(200).json(comparison)
+           });
+            
         })
 });
 

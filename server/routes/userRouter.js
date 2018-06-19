@@ -1,5 +1,7 @@
 const express = require('express');
+const jwtCheck = require('../middleware/auth')
 //const encryptLib = require('../modules/encryption');
+const sqlService = require('../services/sqlService');
 const pool = require('../modules/pool');
 
 const router = express.Router();
@@ -16,58 +18,22 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/login/:id', (req, res) => {
-  const userId = req.params.id;
-  const queryText = 
-  `SELECT 
-    a.*, 
-    m.match_percent, 
-    m.match_text, 
-    m.match_name, 
-    b.day,
-    b.month, 
-    b.year, 
-    b.hour, 
-    b.minute, 
-    b.latitude, 
-    b.longitude,
-    b.timezone 
-  FROM 
-    auth0user a 
-  JOIN 
-    birthinfo b 
-  ON 
-    (a.id = b.user_id)
-  FULL OUTER JOIN 
-    match m 
-  ON 
-    (b.user_id = m.user_id) 
-  WHERE a.auth0_user_id =  $1`;
-
-  pool.query(queryText, [userId]).then(function(response){
-    if(response.rows.length > 0) {
-      const rows = response.rows;
-      const userBirthData = getUserBirthData(rows[0])
-      const userMatches = getUserMatches(rows)
-
-      const responseJSON =  {
-        userId : userId,
-        userBirthData : userBirthData,
-        userMatches : userMatches
+router.get('/login', jwtCheck, (req, res) => {
+  const userId = req.user.sub;
+    sqlService.getUserData(userId).then(json => {
+      res.json(json);
+    }).catch(err => {
+      if (err === 204) {
+        res.sendStatus(204);
+      } else {
+        res.sendStatus(500);
       }
-
-      res.json(responseJSON);
-    } else {
-       //NO USER INFO FOUND, first time accessing.
-       res.sendStatus(204)
-    }
-  }).catch(function(errorResponse){
-    res.status(500).send(errorResponse);
-  });
+    });
 })
 
-router.post('/create', function(req, res) {
-  const { day, month, year, hour, minute, lat, lon, timezone, auth0id } = req.body.data;
+router.post('/create', jwtCheck, function(req, res) {
+  const auth0id = req.user.sub
+  const { day, month, year, hour, minute, lat, lon, timezone } = req.body.data;
   const query1 = `INSERT INTO auth0user(auth0_user_id) VALUES ($1) RETURNING ID;`
   pool.query(query1, [auth0id]).then((response) => {
     
@@ -101,36 +67,6 @@ router.post('/create', function(req, res) {
 //   res.sendStatus(200);
 // });
 
-function getUserBirthData(row) {
-  const dobObject = {
-    hour : row.hour,
-    minute : row.minute,
-    day : row.day,
-    month : row.month,
-    year : row.year,
-    hour : row.hour,
-    lat : row.latitude,
-    lon : row.longitude
-  }
 
-  return dobObject;
-}
-
-function getUserMatches(rows) {
-  let responseArray = [];
-  rows.forEach(row => {
-
-    //TODO: figure out what to do for nulls? 
-
-    const rowObject = {
-      name : row.match_name,
-      percent : row.match_percent,
-      text : row.match_text
-    }
-    responseArray.push(rowObject)
-  });
-
-  return responseArray;
-}
 
 module.exports = router;
