@@ -42,10 +42,26 @@ router.post('/create', jwtCheck, function(req, res) {
 
     pool.query(query2, [day, month, year, hour, minute, lat, lon, timezone]).then((response) => {
       res.sendStatus(201);
+    }).catch(err => {
+      res.sendStatus(500);
     })
   }).catch(err => {
     res.status(400).sendStatus(err.message)
   })
+});
+
+
+router.put('/update', jwtCheck, function(req, res) {
+  const auth0id = req.user.sub
+  const { day, month, year, hour, minute, lat, lon, timezone } = req.body.data;
+  const query2 = `UPDATE birthinfo SET (day, month, year, hour, minute, latitude, longitude, timezone
+    ) = ($1, $2, $3, $4, $5, $6, $7, $8) WHERE user_id = (SELECT id from auth0user WHERE auth0_user_id = '${auth0id}' );`
+
+    pool.query(query2, [day, month, year, hour, minute, lat, lon, timezone]).then((response) => {
+      res.sendStatus(201);
+    }).catch(err => {
+      res.sendStatus(500);
+    })
 });
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
